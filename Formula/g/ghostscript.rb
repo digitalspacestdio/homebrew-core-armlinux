@@ -64,6 +64,9 @@ class Ghostscript < Formula
     libs = %w[expat freetype jbig2dec jpeg lcms2mt leptonica libpng openjpeg tesseract tiff zlib]
     libs.each { |l| rm_r(buildpath/l) }
 
+    ENV.append "CFLAGS", "-Wno-incompatible-pointer-types"
+    ENV.append "CFLAGS", "-Wno-int-conversion"
+
     configure = build.head? ? "./autogen.sh" : "./configure"
 
     args = %w[--disable-compile-inits
@@ -72,6 +75,7 @@ class Ghostscript < Formula
               --with-system-libtiff
               --without-x]
 
+    args.delete("--with-system-libtiff") # aarch64 linux temporary workaround 
     # Set the correct library install names so that `brew` doesn't need to fix them up later.
     ENV["DARWIN_LDFLAGS_SO_PREFIX"] = "#{opt_lib}/"
     system configure, *std_configure_args, *args

@@ -72,6 +72,7 @@ class BerkeleyDbAT5 < Formula
     end
 
     args = %W[
+      --disable-mutexsupport
       --disable-static
       --prefix=#{prefix}
       --mandir=#{man}
